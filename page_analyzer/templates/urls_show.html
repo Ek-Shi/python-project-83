@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}Сайт: {{ url[1] }}{% endblock %}
+
+{% block content %}
+  <div class="table-responsive" data-test="url">
+    <h2 class="mt-5 mb-3">Сайт: {{ url[1] }}</h2>
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <th scope="row">ID</th>
+                <td>{{ url[0] }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Имя</th>
+                <td>{{ url[1] }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Дата создания</th>
+                <td>{{ url[2].strftime('%Y-%m-%d') }}</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+
+  <h2 class="mt-5 mb-3">Проверки</h2>
+  <form method="post" action="{{ url_for('add_url_check', id=url[0]) }}">
+      <input type="submit" class="btn btn-primary" value="Запустить проверку">
+  </form>
+
+  <table class="table table-bordered table-hover mt-3" data-test="checks">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Код ответа</th>
+        <th>h1</th>
+        <th>title</th>
+        <th>description</th>
+        <th>Дата создания</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for check in checks %}
+      <tr>
+        <td>{{ check[0] }}</td> {# ID проверки #}
+        <td>{{ check[2] or '' }}</td> {# status_code #}
+        <td>{{ check[3] or '' }}</td> {# h1 #}
+        <td>{{ check[4] or '' }}</td> {# title #}
+        <td>{{ check[5] or '' }}</td> {# description #}
+        <td>{{ check[6].strftime('%Y-%m-%d %H:%M:%S') }}</td> {# created_at #}
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6">Проверок еще не было</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
